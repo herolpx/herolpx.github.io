@@ -19,10 +19,15 @@
         renderer="logarithmicDepthBuffer: true;"
     >
         <a-assets>
-            <img id="img1" src="img/pattern-birrete.png">
-            <img id="img2" src="img/pattern-marker.png">
-            <img id="img3" src="img/WhatsApp Image 2024-09-18 at 08.28.51.jpeg">
-            <img id="img4" src="img/Graduacion_AR.png">
+            <img id="img1" src="img/1.JPG">
+            <img id="img2" src="img/2.JPG">
+            <img id="img3" src="img/3.JPG">
+            <img id="img4" src="img/4.JPG">
+            <img id="img5" src="img/5.JPG">
+            <img id="img6" src="img/6.JPG">
+            <img id="img7" src="img/7.JPG">
+            <img id="img8" src="img/8.JPG">
+            <img id="img9" src="img/9.JPG">
         </a-assets>
 
         <a-marker type="pattern" url="markers/pattern-birrete.patt" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
@@ -85,7 +90,7 @@
             marker.addEventListener('markerFound', function () {
                 console.log('Marker found');
                 plane.setAttribute('image-switcher', {
-                    images: ['#img1', '#img2', '#img3', '#img4'],
+                    images: ['#img1', '#img2', '#img3', '#img4','#img5', '#img6', '#img7', '#img8', '#img9'],
                     interval: 3000
                 });
             });
