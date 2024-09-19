@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Graduación 2024 - Luis Pedro Gómez de la Roca</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
@@ -14,7 +14,7 @@
 <body style="margin: 0; overflow: hidden;">
 
     <!-- A-Frame Scene for WebAR -->
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; cameraParametersUrl: 'https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/examples/marker-based/arjs_camera_default.json';">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
 
         <!-- Custom Pattern Marker Tracking (AR.js) -->
         <a-marker type="pattern" url="markers/pattern-birrete.patt">
@@ -27,73 +27,10 @@
                 <a-plane src="img/Graduacion_AR.png" height="1" width="1.5" position="-1 0 0" rotation="0 -90 0"></a-plane>
             </a-entity>
         </a-marker>
-
-
         <!-- Camera Handling -->
         <a-entity camera fov="80"></a-entity>
 
     </a-scene>
-
-    <!-- Carousel Overlay -->
-    <div class="carousel" id="carousel">
-        <h2>Image Carousel</h2>
-        <!-- Image Gallery -->
-        <img src="path/to/image1.jpg" class="active" id="img1">
-        <img src="path/to/image2.jpg" id="img2">
-        <img src="path/to/image3.jpg" id="img3">
-
-        <!-- Carousel Navigation Buttons -->
-        <div class="carousel-buttons">
-            <button class="carousel-button" id="prev">⟨ Previous</button>
-            <button class="carousel-button" id="next">Next ⟩</button>
-        </div>
-    </div>
-
-    <script>
-        // Get elements
-        const carousel = document.getElementById('carousel');
-        const markerHiro = document.getElementById('markerHiro');
-        const images = document.querySelectorAll('.carousel img');
-        const prev = document.getElementById('prev');
-        const next = document.getElementById('next');
-
-        let currentIndex = 0;
-
-        // Show the carousel when the marker is detected
-        markerHiro.addEventListener('markerFound', () => {
-            carousel.style.display = 'flex'; // Show carousel as a flex container
-        });
-
-        // Hide the carousel when the marker is lost
-        markerHiro.addEventListener('markerLost', () => {
-            carousel.style.display = 'none'; // Hide carousel
-        });
-
-        // Show the next image
-        next.addEventListener('click', () => {
-            images[currentIndex].classList.remove('active');
-            currentIndex = (currentIndex + 1) % images.length; // Loop around
-            images[currentIndex].classList.add('active');
-        });
-
-        // Show the previous image
-        prev.addEventListener('click', () => {
-            images[currentIndex].classList.remove('active');
-            currentIndex = (currentIndex - 1 + images.length) % images.length; // Loop around
-            images[currentIndex].classList.add('active');
-        });
-    </script>
-
-    <script>
-        // Override the default getUserMedia constraints
-        ARjs.Utils.overrideARjsCameraSourceType('webcam', {
-            video: {
-                facingMode: 'environment',
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            }
-        });
-    </script>
 
 
 </body>
