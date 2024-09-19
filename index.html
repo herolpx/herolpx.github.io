@@ -28,9 +28,13 @@
             </a-entity>
         </a-marker>
         <!-- Camera Handling -->
-        <a-entity camera zoom="1"></a-entity>
+        <a-entity camera></a-entity>
 
     </a-scene>
+    <script>
+        var secondCameraEl = document.querySelector('#second-camera');
+        secondCameraEl.setAttribute('camera', 'active', true);
+    </script>
 
 
 </body>
