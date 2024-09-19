@@ -44,7 +44,7 @@
         AFRAME.registerComponent('image-switcher', {
             schema: {
                 images: {type: 'array'},
-                interval: {type: 'int', default: 5000} // 5000 ms or 5 seconds
+                interval: {type: 'int', default: 3000} // 5000 ms or 5 seconds
             },
             init: function () {
                 this.currentIndex = 0;
@@ -69,7 +69,7 @@
                 // After fading out, change the image and fade in
                 setTimeout(() => {
                     // Switch to the next image in the list
-                    this.currentIndex = (this.currentIndex + 1) % this.data.images.length;
+                    this.currentIndex = (this.currentIndex === 9) ? 1 : this.currentIndex + 1;
                     this.el.setAttribute('src', this.data.images[this.currentIndex]);
 
                     // Fade in
