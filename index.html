@@ -84,6 +84,17 @@
         });
     </script>
 
+    <script>
+        // Override the default getUserMedia constraints
+        ARjs.Utils.overrideARjsCameraSourceType('webcam', {
+            video: {
+                facingMode: 'environment',
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        });
+    </script>
+
 
 </body>
 </html>
