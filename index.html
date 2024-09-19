@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graduación 2024 - Luis Pedro Gómez de la Roca</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 
     <!-- AR.js for Pattern Markers -->
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
@@ -21,44 +21,69 @@
             <!-- Image Gallery -->
             <a-entity id="carousel" rotation="-90 0 0" position="0 0.5 0">
                 <!-- Each image is a plane in a circle -->
-                <a-plane src="img/pattern-birrete.png" height="1" width="1.5" position="0 0 2"></a-plane>
-                <a-plane src="img/pattern-marker.png" height="1" width="1.5" position="2 0 0" rotation="0 90 0"></a-plane>
-                <a-plane src="img/WhatsApp Image 2024-09-18 at 08.28.51.jpeg" height="1" width="1.5" position="0 0 -2" rotation="0 180 0"></a-plane>
-                <a-plane src="img/Graduacion_AR.png" height="1" width="1.5" position="-2 0 0" rotation="0 -90 0"></a-plane>
+                <a-plane src="img/pattern-birrete.png" height="1" width="1.5" position="0 0 1"></a-plane>
+                <a-plane src="img/pattern-marker.png" height="1" width="1.5" position="1 0 0" rotation="0 90 0"></a-plane>
+                <a-plane src="img/WhatsApp Image 2024-09-18 at 08.28.51.jpeg" height="1" width="1.5" position="0 0 -1" rotation="0 180 0"></a-plane>
+                <a-plane src="img/Graduacion_AR.png" height="1" width="1.5" position="-1 0 0" rotation="0 -90 0"></a-plane>
             </a-entity>
         </a-marker>
 
 
         <!-- Camera Handling -->
-        <a-entity camera="active: true" look-controls wasd-controls position="0 1.6 0" data-aframe-default-camera></a-entity>
+        <a-entity camera fov="80"></a-entity>
 
     </a-scene>
 
-    <!-- Navigation Buttons -->
-    <button class="carousel-button" id="prev-button">⟨</button>
-    <button class="carousel-button" id="next-button">⟩</button>
+    <!-- Carousel Overlay -->
+    <div class="carousel" id="carousel">
+        <h2>Image Carousel</h2>
+        <!-- Image Gallery -->
+        <img src="path/to/image1.jpg" class="active" id="img1">
+        <img src="path/to/image2.jpg" id="img2">
+        <img src="path/to/image3.jpg" id="img3">
+
+        <!-- Carousel Navigation Buttons -->
+        <div class="carousel-buttons">
+            <button class="carousel-button" id="prev">⟨ Previous</button>
+            <button class="carousel-button" id="next">Next ⟩</button>
+        </div>
+    </div>
 
     <script>
-        // Get the carousel entity and buttons
+        // Get elements
         const carousel = document.getElementById('carousel');
-        const prevButton = document.getElementById('prev-button');
-        const nextButton = document.getElementById('next-button');
+        const markerHiro = document.getElementById('markerHiro');
+        const images = document.querySelectorAll('.carousel img');
+        const prev = document.getElementById('prev');
+        const next = document.getElementById('next');
 
-        // Current angle of the carousel
-        let currentAngle = 0;
+        let currentIndex = 0;
 
-        // Rotate the carousel to the next image
-        nextButton.addEventListener('click', () => {
-            currentAngle -= 90;
-            carousel.setAttribute('rotation', `0 ${currentAngle} 0`);
+        // Show the carousel when the marker is detected
+        markerHiro.addEventListener('markerFound', () => {
+            carousel.style.display = 'flex'; // Show carousel as a flex container
         });
 
-        // Rotate the carousel to the previous image
-        prevButton.addEventListener('click', () => {
-            currentAngle += 90;
-            carousel.setAttribute('rotation', `0 ${currentAngle} 0`);
+        // Hide the carousel when the marker is lost
+        markerHiro.addEventListener('markerLost', () => {
+            carousel.style.display = 'none'; // Hide carousel
+        });
+
+        // Show the next image
+        next.addEventListener('click', () => {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length; // Loop around
+            images[currentIndex].classList.add('active');
+        });
+
+        // Show the previous image
+        prev.addEventListener('click', () => {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex - 1 + images.length) % images.length; // Loop around
+            images[currentIndex].classList.add('active');
         });
     </script>
+
 
 </body>
 </html>
