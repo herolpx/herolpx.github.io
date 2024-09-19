@@ -27,14 +27,15 @@
 
         <a-marker type="pattern" url="markers/pattern-birrete.patt" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
             <!-- This is where we'll display the current image -->
-            <a-plane id="image-display" src="#img1" height="1" width="1.5" position="0 0 0.5" rotation="-90 0 0"></a-plane>
+            <a-plane id="image-display" src="#img1" height="1" width="1.5" position="0 0 0.5" rotation="-90 0 0"
+                     material="opacity: 1; transparent: true"></a-plane>
         </a-marker>
 
-        <a-entity camera></a-entity>
+        <a-entity camera zoom="1"></a-entity>
     </a-scene>
 
     <script>
-        // Define a component to switch images every 5 seconds
+        // Define a component to switch images every 5 seconds with fading animation
         AFRAME.registerComponent('image-switcher', {
             schema: {
                 images: {type: 'array'},
@@ -43,17 +44,37 @@
             init: function () {
                 this.currentIndex = 0;
                 this.el.setAttribute('src', this.data.images[this.currentIndex]);
-
-                this.imageSwitch = () => {
-                    this.currentIndex = (this.currentIndex + 1) % this.data.images.length;
-                    this.el.setAttribute('src', this.data.images[this.currentIndex]);
-                };
+                this.imageSwitch = this.imageSwitch.bind(this); // Ensure correct 'this' context
             },
             play: function () {
                 this.intervalID = setInterval(this.imageSwitch, this.data.interval);
             },
             pause: function () {
                 clearInterval(this.intervalID);
+            },
+            imageSwitch: function () {
+                // Fade out
+                this.el.setAttribute('animation__fadeout', {
+                    property: 'material.opacity',
+                    to: 0,
+                    dur: 500,
+                    easing: 'easeInOutQuad'
+                });
+
+                // After fading out, change the image and fade in
+                setTimeout(() => {
+                    // Switch to the next image in the list
+                    this.currentIndex = (this.currentIndex + 1) % this.data.images.length;
+                    this.el.setAttribute('src', this.data.images[this.currentIndex]);
+
+                    // Fade in
+                    this.el.setAttribute('animation__fadein', {
+                        property: 'material.opacity',
+                        to: 1,
+                        dur: 500,
+                        easing: 'easeInOutQuad'
+                    });
+                }, 500); // Wait for fade-out to complete before changing image
             }
         });
 
@@ -65,7 +86,7 @@
                 console.log('Marker found');
                 plane.setAttribute('image-switcher', {
                     images: ['#img1', '#img2', '#img3', '#img4'],
-                    interval: 4000
+                    interval: 3000
                 });
             });
 
