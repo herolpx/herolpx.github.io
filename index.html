@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Combined WebAR (Pattern & Image Tracking)</title>
-
+    <title>Graduación 2024 - Luis Pedro Gómez de la Roca</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 
     <!-- AR.js for Pattern Markers -->
@@ -18,8 +18,14 @@
 
         <!-- Custom Pattern Marker Tracking (AR.js) -->
         <a-marker type="pattern" url="markers/pattern-birrete.patt">
-            <!-- 3D object to show when custom pattern marker is detected -->
-            <a-sphere position="0 0.5 0" radius="0.25" material="color: yellow;"></a-sphere>
+            <!-- Image Gallery -->
+            <a-entity id="carousel" rotation="0 0 0" position="0 0.5 0">
+                <!-- Each image is a plane in a circle -->
+                <a-plane src="img/pattern-birrete.png" height="1" width="1.5" position="0 0 2"></a-plane>
+                <a-plane src="img/pattern-marker.png" height="1" width="1.5" position="2 0 0" rotation="0 90 0"></a-plane>
+                <a-plane src="img/WhatsApp Image 2024-09-18 at 08.28.51.jpeg" height="1" width="1.5" position="0 0 -2" rotation="0 180 0"></a-plane>
+                <a-plane src="img/Graduacion_AR.png" height="1" width="1.5" position="-2 0 0" rotation="0 -90 0"></a-plane>
+            </a-entity>
         </a-marker>
 
 
@@ -27,6 +33,32 @@
         <a-entity camera="active: true" look-controls wasd-controls position="0 1.6 0" data-aframe-default-camera></a-entity>
 
     </a-scene>
+
+    <!-- Navigation Buttons -->
+    <button class="carousel-button" id="prev-button">⟨</button>
+    <button class="carousel-button" id="next-button">⟩</button>
+
+    <script>
+        // Get the carousel entity and buttons
+        const carousel = document.getElementById('carousel');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+
+        // Current angle of the carousel
+        let currentAngle = 0;
+
+        // Rotate the carousel to the next image
+        nextButton.addEventListener('click', () => {
+            currentAngle -= 90;
+            carousel.setAttribute('rotation', `0 ${currentAngle} 0`);
+        });
+
+        // Rotate the carousel to the previous image
+        prevButton.addEventListener('click', () => {
+            currentAngle += 90;
+            carousel.setAttribute('rotation', `0 ${currentAngle} 0`);
+        });
+    </script>
 
 </body>
 </html>
