@@ -40,15 +40,15 @@
 
             // Array of image paths
             const imagePaths = [
-                'img/1.JPG',
-                'img/2.JPG',
-                'img/3.JPG',
-                'img/4.JPG',
-                'img/5.JPG',
-                'img/6.JPG',
-                'img/7.JPG',
-                'img/8.JPG',
-                'img/9.JPG'
+                'img/1.jpg',
+                'img/2.jpg',
+                'img/3.jpg',
+                'img/4.jpg',
+                'img/5.jpg',
+                'img/6.jpg',
+                'img/7.jpg',
+                'img/8.jpg',
+                'img/9.jpg'
             ];
 
             // Function to dynamically set the plane's dimensions relative to marker size
@@ -119,13 +119,14 @@
                     easing: 'easeInOutQuad'
                 });
 
-                // Set up fade-out animation for the current image after it has been visible for a while
+                // Set up fade-out animation for the current image after a delay
                 setTimeout(() => {
                     currentImage.setAttribute('animation__fadeout', {
                         property: 'material.opacity',
                         to: 0,
                         dur: 1000,
-                        easing: 'easeInOutQuad'
+                        easing: 'easeInOutQuad',
+                        startEvents: 'fadeout'
                     });
 
                     // Hide current image completely after fadeout animation completes
@@ -133,10 +134,10 @@
                         currentImage.setAttribute('visible', 'false');
                     });
 
-                    // Show next image with transition after fade-out completes
+                    // Show next image with transition
                     setTimeout(() => {
                         showImagesWithTransition(imageIds, nextIndex);
-                    }, 1000); // Wait for fade-out to complete before showing next image
+                    }, 1000); // Start showing next image after 1 second delay
                 }, 3000); // Keep the image visible for 3 seconds before starting fade-out
             }
 
