@@ -72,12 +72,17 @@
                     // Get the a-plane element by its id
                     const plane = document.querySelector(`#${planeId}`);
 
-                    // Set the image as the texture source
-                    plane.setAttribute('src', imagePath);
-
                     // Set the new dimensions
                     plane.setAttribute('width', newWidth);  // Use the calculated width
                     plane.setAttribute('height', newHeight);  // Use the calculated height
+
+                    // Now set the image as the texture source after it is fully loaded
+                    plane.setAttribute('src', imagePath);
+                };
+
+                // Error handler for image loading issues
+                img.onerror = function () {
+                    console.error(`Failed to load image: ${imagePath}`);
                 };
 
                 // Set the source of the image to trigger the load event
@@ -119,14 +124,13 @@
                     easing: 'easeInOutQuad'
                 });
 
-                // Set up fade-out animation for the current image after a delay
+                // Set up fade-out animation for the current image after it has been visible for a while
                 setTimeout(() => {
                     currentImage.setAttribute('animation__fadeout', {
                         property: 'material.opacity',
                         to: 0,
                         dur: 1000,
-                        easing: 'easeInOutQuad',
-                        startEvents: 'fadeout'
+                        easing: 'easeInOutQuad'
                     });
 
                     // Hide current image completely after fadeout animation completes
@@ -134,10 +138,10 @@
                         currentImage.setAttribute('visible', 'false');
                     });
 
-                    // Show next image with transition
+                    // Show next image with transition after fade-out completes
                     setTimeout(() => {
                         showImagesWithTransition(imageIds, nextIndex);
-                    }, 1000); // Start showing next image after 1 second delay
+                    }, 1000); // Wait for fade-out to complete before showing next image
                 }, 3000); // Keep the image visible for 3 seconds before starting fade-out
             }
 
