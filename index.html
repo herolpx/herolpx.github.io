@@ -3,7 +3,6 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>Graduación 2024 - Luis Pedro Gómez de la Roca</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <!-- we import arjs version without NFT but with marker + location based support -->
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <body style="margin : 0px; overflow: hidden;">
         <a-scene embedded arjs>
@@ -32,13 +31,9 @@
         </a-scene>
 
         <script>
-            // Scaling factor relative to marker size
             const scalingFactor = 3;
-            
-            // Define the marker's reference size (e.g., 1x1 units)
             const markerReferenceSize = 1;
 
-            // Array of image paths
             const imagePaths = [
                 'img/1.JPG',
                 'img/2.JPG',
@@ -51,71 +46,46 @@
                 'img/9.JPG'
             ];
 
-            // Function to dynamically set the plane's dimensions relative to marker size
             function setPlaneDimensions(imagePath, planeId, scalingFactor, markerSize) {
-                // Create a new Image object
                 const img = new Image();
-
-                // Load the image and get its natural dimensions
                 img.onload = function () {
                     const originalWidth = img.naturalWidth;
                     const originalHeight = img.naturalHeight;
-
-                    // Calculate the image aspect ratio
                     const imageAspectRatio = originalWidth / originalHeight;
-
-                    // Calculate the plane's width and height relative to the marker size
-                    // We'll keep the marker's size as the "height" reference and scale the width accordingly
                     const newHeight = markerSize * scalingFactor;
-                    const newWidth = newHeight * imageAspectRatio; // Maintaining the aspect ratio
+                    const newWidth = newHeight * imageAspectRatio;
 
-                    // Get the a-plane element by its id
                     const plane = document.querySelector(`#${planeId}`);
-
-                    // Set the new dimensions
-                    plane.setAttribute('width', newWidth);  // Use the calculated width
-                    plane.setAttribute('height', newHeight);  // Use the calculated height
-
-                    // Now set the image as the texture source after it is fully loaded
+                    plane.setAttribute('width', newWidth);
+                    plane.setAttribute('height', newHeight);
                     plane.setAttribute('src', imagePath);
                 };
 
-                // Error handler for image loading issues
                 img.onerror = function () {
                     console.error(`Failed to load image: ${imagePath}`);
                 };
 
-                // Set the source of the image to trigger the load event
                 img.src = imagePath;
             }
 
-            // Loop through the images and assign each one to a plane
             imagePaths.forEach((path, index) => {
-                // Calculate the corresponding plane id
                 const planeId = `image-${index + 1}`;
-                // Call the function with the appropriate parameters
                 setPlaneDimensions(path, planeId, scalingFactor, markerReferenceSize);
             });
 
-            // Function to show images one by one with fade-in/fade-out effect
             function showImagesWithTransition(imageIds, currentIndex = 0) {
-                // Calculate the previous and next image indices
                 const prevIndex = (currentIndex - 1 + imageIds.length) % imageIds.length;
                 const nextIndex = (currentIndex + 1) % imageIds.length;
-
-                // Get the previous and current image planes
+                
                 const prevImage = document.querySelector(`#${imageIds[prevIndex]}`);
                 const currentImage = document.querySelector(`#${imageIds[currentIndex]}`);
-
-                // Remove any existing animations from previous image
-                prevImage.removeAttribute('animation');
-                prevImage.removeAttribute('animation__2');
-
-                // Make sure previous image is completely invisible
+                console.log("Before: ");
+                console.log(currentImage);
+                prevImage.removeAttribute('animation__fadein');
+                prevImage.removeAttribute('animation__fadeout');
                 prevImage.setAttribute('material', 'opacity', '0');
                 prevImage.setAttribute('visible', 'false');
 
-                // Set up fade-in animation for the current image
                 currentImage.setAttribute('visible', 'true');
                 currentImage.setAttribute('animation__fadein', {
                     property: 'material.opacity',
@@ -124,7 +94,6 @@
                     easing: 'easeInOutQuad'
                 });
 
-                // Set up fade-out animation for the current image after it has been visible for a while
                 setTimeout(() => {
                     currentImage.setAttribute('animation__fadeout', {
                         property: 'material.opacity',
@@ -133,21 +102,19 @@
                         easing: 'easeInOutQuad'
                     });
 
-                    // Hide current image completely after fadeout animation completes
                     currentImage.addEventListener('animationcomplete__fadeout', () => {
                         currentImage.setAttribute('visible', 'false');
                     });
 
-                    // Show next image with transition after fade-out completes
                     setTimeout(() => {
+                        //nextIndex = (currentIndex + 1) % imageIds.length;
                         showImagesWithTransition(imageIds, nextIndex);
-                    }, 1000); // Wait for fade-out to complete before showing next image
-                }, 3000); // Keep the image visible for 3 seconds before starting fade-out
+                    }, 1000);
+                }, 3000);
             }
 
-            // Start the image sequence
             const imageIds = imagePaths.map((_, index) => `image-${index + 1}`);
-            setTimeout(() => showImagesWithTransition(imageIds), 1000); // Start after 1 second
+            setTimeout(() => showImagesWithTransition(imageIds), 1000);
         </script>
     </body>
 </html>
