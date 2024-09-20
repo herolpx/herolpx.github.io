@@ -40,15 +40,15 @@
 
             // Array of image paths
             const imagePaths = [
-                'img/1.jpg',
-                'img/2.jpg',
-                'img/3.jpg',
-                'img/4.jpg',
-                'img/5.jpg',
-                'img/6.jpg',
-                'img/7.jpg',
-                'img/8.jpg',
-                'img/9.jpg'
+                'img/1.JPG',
+                'img/2.JPG',
+                'img/3.JPG',
+                'img/4.JPG',
+                'img/5.JPG',
+                'img/6.JPG',
+                'img/7.JPG',
+                'img/8.JPG',
+                'img/9.JPG'
             ];
 
             // Function to dynamically set the plane's dimensions relative to marker size
@@ -72,17 +72,12 @@
                     // Get the a-plane element by its id
                     const plane = document.querySelector(`#${planeId}`);
 
+                    // Set the image as the texture source
+                    plane.setAttribute('src', imagePath);
+
                     // Set the new dimensions
                     plane.setAttribute('width', newWidth);  // Use the calculated width
                     plane.setAttribute('height', newHeight);  // Use the calculated height
-
-                    // Now set the image as the texture source after it is fully loaded
-                    plane.setAttribute('src', imagePath);
-                };
-
-                // Error handler for image loading issues
-                img.onerror = function () {
-                    console.error(`Failed to load image: ${imagePath}`);
                 };
 
                 // Set the source of the image to trigger the load event
