@@ -8,25 +8,51 @@
     <body style="margin : 0px; overflow: hidden;">
         <a-scene embedded arjs>
             <a-marker type="pattern" url="markers/pattern-birrete.patt">
-                <!-- This is where we'll display the current image -->
-                <a-plane id="image-display" position="0 0 0.5" rotation="-90 0 0"
-                material="opacity: 1; transparent: true"></a-plane>
+                <!-- Placeholder planes for each image, their properties will be set dynamically -->
+                <a-plane id="image-1" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-2" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-3" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-4" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-5" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-6" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-7" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-8" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
+                <a-plane id="image-9" position="0 0 0.5" rotation="-90 0 0" visible="false"
+                         material="opacity: 0; transparent: true"></a-plane>
             </a-marker>
             <a-entity camera></a-entity>
         </a-scene>
 
         <script>
             // Scaling factor relative to marker size
-            const scalingFactor = 3.5;
+            const scalingFactor = 3;
             
             // Define the marker's reference size (e.g., 1x1 units)
             const markerReferenceSize = 1;
 
-            // Path to the image you want to use
-            const imagePath = 'img/1.JPG';
+            // Array of image paths
+            const imagePaths = [
+                'img/1.jpg',
+                'img/2.jpg',
+                'img/3.jpg',
+                'img/4.jpg',
+                'img/5.jpg',
+                'img/6.jpg',
+                'img/7.jpg',
+                'img/8.jpg',
+                'img/9.jpg'
+            ];
 
             // Function to dynamically set the plane's dimensions relative to marker size
-            function setPlaneDimensions(imagePath, scalingFactor, markerSize) {
+            function setPlaneDimensions(imagePath, planeId, scalingFactor, markerSize) {
                 // Create a new Image object
                 const img = new Image();
 
@@ -43,8 +69,8 @@
                     const newHeight = markerSize * scalingFactor;
                     const newWidth = newHeight * imageAspectRatio; // Maintaining the aspect ratio
 
-                    // Get the a-plane element
-                    const plane = document.querySelector('#image-display');
+                    // Get the a-plane element by its id
+                    const plane = document.querySelector(`#${planeId}`);
 
                     // Set the image as the texture source
                     plane.setAttribute('src', imagePath);
@@ -58,8 +84,65 @@
                 img.src = imagePath;
             }
 
-            // Call the function with the desired image path, scaling factor, and marker size
-            setPlaneDimensions(imagePath, scalingFactor, markerReferenceSize);
+            // Loop through the images and assign each one to a plane
+            imagePaths.forEach((path, index) => {
+                // Calculate the corresponding plane id
+                const planeId = `image-${index + 1}`;
+                // Call the function with the appropriate parameters
+                setPlaneDimensions(path, planeId, scalingFactor, markerReferenceSize);
+            });
+
+            // Function to show images one by one with fade-in/fade-out effect
+            function showImagesWithTransition(imageIds, currentIndex = 0) {
+                // Calculate the previous and next image indices
+                const prevIndex = (currentIndex - 1 + imageIds.length) % imageIds.length;
+                const nextIndex = (currentIndex + 1) % imageIds.length;
+
+                // Get the previous and current image planes
+                const prevImage = document.querySelector(`#${imageIds[prevIndex]}`);
+                const currentImage = document.querySelector(`#${imageIds[currentIndex]}`);
+
+                // Remove any existing animations from previous image
+                prevImage.removeAttribute('animation');
+                prevImage.removeAttribute('animation__2');
+
+                // Make sure previous image is completely invisible
+                prevImage.setAttribute('material', 'opacity', '0');
+                prevImage.setAttribute('visible', 'false');
+
+                // Set up fade-in animation for the current image
+                currentImage.setAttribute('visible', 'true');
+                currentImage.setAttribute('animation__fadein', {
+                    property: 'material.opacity',
+                    to: 1,
+                    dur: 1000,
+                    easing: 'easeInOutQuad'
+                });
+
+                // Set up fade-out animation for the current image after it has been visible for a while
+                setTimeout(() => {
+                    currentImage.setAttribute('animation__fadeout', {
+                        property: 'material.opacity',
+                        to: 0,
+                        dur: 1000,
+                        easing: 'easeInOutQuad'
+                    });
+
+                    // Hide current image completely after fadeout animation completes
+                    currentImage.addEventListener('animationcomplete__fadeout', () => {
+                        currentImage.setAttribute('visible', 'false');
+                    });
+
+                    // Show next image with transition after fade-out completes
+                    setTimeout(() => {
+                        showImagesWithTransition(imageIds, nextIndex);
+                    }, 1000); // Wait for fade-out to complete before showing next image
+                }, 3000); // Keep the image visible for 3 seconds before starting fade-out
+            }
+
+            // Start the image sequence
+            const imageIds = imagePaths.map((_, index) => `image-${index + 1}`);
+            setTimeout(() => showImagesWithTransition(imageIds), 1000); // Start after 1 second
         </script>
     </body>
 </html>
