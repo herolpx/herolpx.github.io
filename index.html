@@ -16,14 +16,17 @@
         </a-scene>
 
         <script>
-            // Define your scaling factor
-            const scalingFactor = 1.5;
+            // Scaling factor relative to marker size
+            const scalingFactor = 3;
+            
+            // Define the marker's reference size (e.g., 1x1 units)
+            const markerReferenceSize = 1;
 
             // Path to the image you want to use
             const imagePath = 'img/1.JPG';
 
-            // Function to dynamically set the plane's dimensions
-            function setPlaneDimensions(imagePath, scalingFactor) {
+            // Function to dynamically set the plane's dimensions relative to marker size
+            function setPlaneDimensions(imagePath, scalingFactor, markerSize) {
                 // Create a new Image object
                 const img = new Image();
 
@@ -32,9 +35,13 @@
                     const originalWidth = img.naturalWidth;
                     const originalHeight = img.naturalHeight;
 
-                    // Calculate new dimensions
-                    const newWidth = originalWidth * scalingFactor;
-                    const newHeight = originalHeight * scalingFactor;
+                    // Calculate the image aspect ratio
+                    const imageAspectRatio = originalWidth / originalHeight;
+
+                    // Calculate the plane's width and height relative to the marker size
+                    // We'll keep the marker's size as the "height" reference and scale the width accordingly
+                    const newHeight = markerSize * scalingFactor;
+                    const newWidth = newHeight * imageAspectRatio; // Maintaining the aspect ratio
 
                     // Get the a-plane element
                     const plane = document.querySelector('#image-display');
@@ -43,16 +50,16 @@
                     plane.setAttribute('src', imagePath);
 
                     // Set the new dimensions
-                    plane.setAttribute('width', newWidth / 100);  // Divide by 100 to match A-Frame scale
-                    plane.setAttribute('height', newHeight / 100);  // Adjust scaling to fit A-Frame unit scale
+                    plane.setAttribute('width', newWidth);  // Use the calculated width
+                    plane.setAttribute('height', newHeight);  // Use the calculated height
                 };
 
                 // Set the source of the image to trigger the load event
                 img.src = imagePath;
             }
 
-            // Call the function with the desired image path and scaling factor
-            setPlaneDimensions(imagePath, scalingFactor);
+            // Call the function with the desired image path, scaling factor, and marker size
+            setPlaneDimensions(imagePath, scalingFactor, markerReferenceSize);
         </script>
     </body>
 </html>
