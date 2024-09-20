@@ -9,10 +9,50 @@
         <a-scene embedded arjs>
             <a-marker type="pattern" url="markers/pattern-birrete.patt">
                 <!-- This is where we'll display the current image -->
-                <a-plane id="image-display" src="img/1.JPG" height="3" width="3" position="0 0 0.5" rotation="-90 0 0"
-                     material="opacity: 1; transparent: true"></a-plane>
+                <a-plane id="image-display" position="0 0 0.5" rotation="-90 0 0"
+                material="opacity: 1; transparent: true"></a-plane>
             </a-marker>
             <a-entity camera></a-entity>
         </a-scene>
+
+        <script>
+            // Define your scaling factor
+            const scalingFactor = 3;
+
+            // Path to the image you want to use
+            const imagePath = 'img/1.JPG';
+
+            // Function to dynamically set the plane's dimensions
+            function setPlaneDimensions(imagePath, scalingFactor) {
+                // Create a new Image object
+                const img = new Image();
+
+                // Load the image and get its natural dimensions
+                img.onload = function () {
+                    const originalWidth = img.naturalWidth;
+                    const originalHeight = img.naturalHeight;
+
+                    // Calculate new dimensions
+                    const newWidth = originalWidth * scalingFactor;
+                    const newHeight = originalHeight * scalingFactor;
+
+                    // Get the a-plane element
+                    const plane = document.querySelector('#image-display');
+
+                    // Set the image as the texture source
+                    plane.setAttribute('src', imagePath);
+
+                    // Set the new dimensions
+                    plane.setAttribute('width', newWidth / 100);  // Divide by 100 to match A-Frame scale
+                    plane.setAttribute('height', newHeight / 100);  // Adjust scaling to fit A-Frame unit scale
+                };
+
+                // Set the source of the image to trigger the load event
+                img.src = imagePath;
+            }
+
+            // Call the function with the desired image path and scaling factor
+            setPlaneDimensions(imagePath, scalingFactor);
+        </script>
     </body>
 </html>
