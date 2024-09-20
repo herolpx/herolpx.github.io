@@ -9,7 +9,8 @@
         <a-scene embedded arjs>
             <a-marker type="pattern" url="markers/pattern-birrete.patt">
                 <!-- This is where we'll display the current image -->
-                <a-box color="tomato" depth="2" height="4" width="0.5"></a-box>
+                <a-plane id="image-display" src="img/1.JPG" height="3" width="3" position="0 0 0.5" rotation="-90 0 0"
+                     material="opacity: 1; transparent: true"></a-plane>
             </a-marker>
             <a-entity camera></a-entity>
         </a-scene>
