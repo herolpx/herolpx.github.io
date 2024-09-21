@@ -55,6 +55,7 @@
                 <a-asset-item id="graciaspp" src="3d/graciaspp.glb"></a-asset-item>
                 <a-asset-item id="maceta" src="3d/maceta.glb"></a-asset-item>
                 <a-asset-item id="centro" src="3d/centro.glb"></a-asset-item>
+                <a-asset-item id="location" src="3d/location.glb"></a-asset-item>
             </a-assets>
 
 
@@ -90,7 +91,11 @@
                 <!-- Placeholder planes for each image, their properties will be set dynamically -->
                 <a-entity gltf-model="#maceta" play-animation></a-entity>
             </a-marker>
-            <a-entity camera></a-entity>
+            <a-entity gps-entity-place="latitude: YOUR_LATITUDE; longitude: YOUR_LONGITUDE;">
+                <a-entity gltf-model="#location-model" scale="0.5 0.5 0.5" play-animation></a-entity>
+            </a-entity>
+
+            <a-camera gps-camera rotation-reader></a-camera>
         </a-scene>
 
         <script>
