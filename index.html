@@ -129,8 +129,7 @@
                 
                 const prevImage = document.querySelector(`#${imageIds[prevIndex]}`);
                 const currentImage = document.querySelector(`#${imageIds[currentIndex]}`);
-                console.log("Before: ");
-                console.log(currentImage);
+
                 prevImage.removeAttribute('animation__fadein');
                 prevImage.removeAttribute('animation__fadeout');
                 prevImage.setAttribute('material', 'opacity', '0');
